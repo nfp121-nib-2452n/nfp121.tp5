@@ -2,36 +2,53 @@ package question2;
 
 import java.util.List;
 import java.util.Map;
-// Ã Â  complÃ©ter
+// à  compléter
+import java.util.*;
 import java.util.StringTokenizer;
 
 public class Chapitre2CoreJava2 {
 
     /**
-     * Obtention d'une liste de mots aÂ  partir de la constante CHAPITRE2.
+     * Obtention d'une liste de mots a  partir de la constante CHAPITRE2.
      * 
      **/
     public static List<String> listeDesMots() {
-        List<String> liste = null; // Ã Â  complÃ©ter
+        List<String> liste = new ArrayList<String>(); // à  compléter
 
         StringTokenizer st = new StringTokenizer(Chapitre2CoreJava2.CHAPITRE2,
                 "[](){};, :.\n\"");
-        // Ã Â  complÃ©ter
-
+        // à  compléte
+      
+        while(st.hasMoreTokens()){
+            liste.add(st.nextToken());
+        }
+        
+       
         return liste;
     }
 
     /**
      * Obtention d'une liste de couples <String,Integer>. 
-     * A chaque mot prÃ©sent dans la liste, est associÃ© son nombre d'occurrence.
+     * A chaque mot présent dans la liste, est associé son nombre d'occurrence.
      * 
      * @param liste la liste des mots
      */
     public static Map<String, Integer> occurrencesDesMots(List<String> liste) {
-        Map<String, Integer> table = null; // Ã Â  complÃ©ter
-        // Ã Â  complÃ©ter
-        // Ã Â  complÃ©ter
+        Map<String, Integer> table = new HashMap<String,Integer>(); // à  compléter
+        // à  compléter
+        // à  compléter
+        for(int i=0;i<liste.size();i++){
+            table.put(liste.get(i),occ(liste.get(i),liste));
+        }
         return table;
+    }
+    
+    public static int occ(String s,List<String> lst){
+        int c=0;
+        for(int i=0;i<lst.size();i++){
+            if(lst.get(i).equals(s))  {c++;}
+        }
+        return c;
     }
 
     public static final String CHAPITRE2 =

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class JPanelListe extends JPanel implements ActionListener, ItemListener {
+public class JPanelListe extends JPanel implements ActionListener, ItemListener,Comparator {
 
     private JPanel cmd = new JPanel();
     private JLabel afficheur = new JLabel();
@@ -23,7 +23,7 @@ public class JPanelListe extends JPanel implements ActionListener, ItemListener 
 
     private CheckboxGroup mode = new CheckboxGroup();
     private Checkbox ordreCroissant = new Checkbox("croissant", mode, false);
-    private Checkbox ordreDecroissant = new Checkbox("décroissant", mode, false);
+    private Checkbox ordreDecroissant = new Checkbox("d�croissant", mode, false);
 
     private JButton boutonOccurrences = new JButton("occurrence");
 
@@ -54,7 +54,7 @@ public class JPanelListe extends JPanel implements ActionListener, ItemListener 
             afficheur.setText(liste.getClass().getName() + " et "+ occurrences.getClass().getName());
             texte.setText(liste.toString());
         }else{
-            texte.setText("la classe Chapitre2CoreJava semble incomplète");
+            texte.setText("la classe Chapitre2CoreJava semble incompl�te");
         }
 
         setLayout(new BorderLayout());
@@ -63,7 +63,11 @@ public class JPanelListe extends JPanel implements ActionListener, ItemListener 
         add(texte, "Center");
 
         boutonRechercher.addActionListener(this);
-        // à compléter;
+        boutonRetirer.addActionListener(this);
+        boutonOccurrences.addActionListener(this);
+        ordreCroissant.addItemListener(this);
+        ordreDecroissant.addItemListener(this);
+        // � compl�ter;
 
     }
 
@@ -72,13 +76,15 @@ public class JPanelListe extends JPanel implements ActionListener, ItemListener 
         try {
             boolean res = false;
             if (ae.getSource() == boutonRechercher || ae.getSource() == saisie) {
+               
                 res = liste.contains(saisie.getText());
+                
                 Integer occur = occurrences.get(saisie.getText());
-                afficheur.setText("résultat de la recherche de : "+ saisie.getText() + " -->  " + res);
+                afficheur.setText("r�sultat de la recherche de : "+ saisie.getText() + " -->  " + res);
             } else if (ae.getSource() == boutonRetirer) {
                 res = retirerDeLaListeTousLesElementsCommencantPar(saisie
                     .getText());
-                afficheur.setText("résultat du retrait de tous les éléments commençant par -->  "+ saisie.getText() + " : " + res);
+                afficheur.setText("r�sultat du retrait de tous les �l�ments commen�ant par -->  "+ saisie.getText() + " : " + res);
             } else if (ae.getSource() == boutonOccurrences) {
                 Integer occur = occurrences.get(saisie.getText());
                 if (occur != null)
@@ -93,21 +99,54 @@ public class JPanelListe extends JPanel implements ActionListener, ItemListener 
         }
     }
 
-    public void itemStateChanged(ItemEvent ie) {
+        public void itemStateChanged(ItemEvent ie) {
         if (ie.getSource() == ordreCroissant)
-            ;// à compléter
+            {
+                croissant();
+                texte.setText(liste.toString());
+                
+            }
         else if (ie.getSource() == ordreDecroissant)
-            ;// à compléter
+            {
+                decroissant();
+                texte.setText(liste.toString());
+            }
 
         texte.setText(liste.toString());
     }
 
     private boolean retirerDeLaListeTousLesElementsCommencantPar(String prefixe) {
         boolean resultat = false;
-        // à compléter
-        // à compléter
-        // à compléter
+        for(int i=0;i<liste.size();i++){
+            if(liste.get(i).equals(prefixe))  {liste.remove(liste.get(i));resultat = true;}
+        }
         return resultat;
+    }
+    
+    private void croissant(){
+        Collections.sort(liste);
+    }
+    
+    private void decroissant(){
+        String temp="";
+        String s1="",s2="";
+        for(int i=0;i<liste.size();i++){
+            for(int j=i+1;j<liste.size()-1;j++){
+                if(compare(liste.get(i),liste.get(j)) < 1){
+                    s1 = liste.get(i);
+                    s2 = liste.get(j);
+                    liste.set(i,s2);liste.set(j,s1);
+                }
+            }
+        }
+    }
+    
+    public int compare(Object s,Object s1){
+        String s2 = s+"";
+        
+        String s3 = s1+"";
+        return s2.compareTo(s3);
+        
     }
 
 }

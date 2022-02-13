@@ -3,6 +3,7 @@ package question2;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Stack;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,21 +24,25 @@ public class JPanelListe2 extends JPanel implements ActionListener, ItemListener
 
     private CheckboxGroup mode = new CheckboxGroup();
     private Checkbox ordreCroissant = new Checkbox("croissant", mode, false);
-    private Checkbox ordreDecroissant = new Checkbox("décroissant", mode, false);
+    private Checkbox ordreDecroissant = new Checkbox("d�croissant", mode, false);
 
     private JButton boutonOccurrences = new JButton("occurrence");
 
     private JButton boutonAnnuler = new JButton("annuler");
 
     private TextArea texte = new TextArea();
-
+    
     private List<String> liste;
     private Map<String, Integer> occurrences;
-
+    private  Stack<List<String>> mem;
+   
+    
     public JPanelListe2(List<String> liste, Map<String, Integer> occurrences) {
         this.liste = liste;
         this.occurrences = occurrences;
-
+        mem = new Stack<List<String>>();
+        mem.push(liste);
+     
         cmd.setLayout(new GridLayout(3, 1));
 
         cmd.add(afficheur);
@@ -58,7 +63,7 @@ public class JPanelListe2 extends JPanel implements ActionListener, ItemListener
             afficheur.setText(liste.getClass().getName() + " et "+ occurrences.getClass().getName());
             texte.setText(liste.toString());
         }else{
-            texte.setText("la classe Chapitre2CoreJava semble incomplète");
+            texte.setText("la classe Chapitre2CoreJava semble incompl�te");
         }
 
         setLayout(new BorderLayout());
@@ -66,8 +71,12 @@ public class JPanelListe2 extends JPanel implements ActionListener, ItemListener
         add(cmd, "North");
         add(texte, "Center");
 
-        boutonRechercher.addActionListener(this);
-        // à compléter;
+       boutonRechercher.addActionListener(this);
+        boutonRetirer.addActionListener(this);
+        boutonOccurrences.addActionListener(this);
+        ordreCroissant.addItemListener(this);
+        ordreDecroissant.addItemListener(this);
+        boutonAnnuler.addActionListener(this);
 
     }
 
@@ -77,13 +86,16 @@ public class JPanelListe2 extends JPanel implements ActionListener, ItemListener
             if (ae.getSource() == boutonRechercher || ae.getSource() == saisie) {
                 res = liste.contains(saisie.getText());
                 Integer occur = occurrences.get(saisie.getText());
-                afficheur.setText("résultat de la recherche de : "
+                afficheur.setText("r�sultat de la recherche de : "
                     + saisie.getText() + " -->  " + res);
             } else if (ae.getSource() == boutonRetirer) {
+                
                 res = retirerDeLaListeTousLesElementsCommencantPar(saisie
                     .getText());
+                mem.push(liste);
+
                 afficheur
-                .setText("résultat du retrait de tous les éléments commençant par -->  "
+                .setText("r�sultat du retrait de tous les �l�ments commen�ant par -->  "
                     + saisie.getText() + " : " + res);
             } else if (ae.getSource() == boutonOccurrences) {
                 Integer occur = occurrences.get(saisie.getText());
@@ -92,8 +104,16 @@ public class JPanelListe2 extends JPanel implements ActionListener, ItemListener
                 else
                     afficheur.setText(" -->  ??? ");
             }
+            if(ae.getSource() == boutonAnnuler){
+                if(!mem.empty()){
+                liste = mem.pop();
+            
+                
+            }
             texte.setText(liste.toString());
-
+            }
+            
+            texte.setText(liste.toString());    
         } catch (Exception e) {
             afficheur.setText(e.toString());
         }
@@ -101,19 +121,62 @@ public class JPanelListe2 extends JPanel implements ActionListener, ItemListener
 
     public void itemStateChanged(ItemEvent ie) {
         if (ie.getSource() == ordreCroissant)
-        ;// à compléter
+            {
+             
+                croissant();
+           
+                texte.setText(liste.toString());
+                mem.push(liste);
+             
+
+                
+            }
         else if (ie.getSource() == ordreDecroissant)
-        ;// à compléter
+            {
+              
+                decroissant();
+                 
+                texte.setText(liste.toString());
+                mem.push(liste);
+
+            }
 
         texte.setText(liste.toString());
     }
 
     private boolean retirerDeLaListeTousLesElementsCommencantPar(String prefixe) {
         boolean resultat = false;
-        // à compléter
-        // à compléter
-        // à compléter
+        for(int i=0;i<liste.size();i++){
+            if(liste.get(i).equals(prefixe))  {liste.remove(liste.get(i));resultat = true;}
+        }
         return resultat;
     }
+    
+    private void croissant(){
+        Collections.sort(liste);
+    }
+    
+    private void decroissant(){
+        String temp="";
+        String s1="",s2="";
+        for(int i=0;i<liste.size();i++){
+            for(int j=i+1;j<liste.size()-1;j++){
+                if(compare(liste.get(i),liste.get(j)) < 1){
+                    s1 = liste.get(i);
+                    s2 = liste.get(j);
+                    liste.set(i,s2);liste.set(j,s1);
+                }
+            }
+        }
+    }
+    
+    public int compare(Object s,Object s1){
+        String s2 = s+"";
+        
+        String s3 = s1+"";
+        return s2.compareTo(s3);
+        
+    }
+
 
 }

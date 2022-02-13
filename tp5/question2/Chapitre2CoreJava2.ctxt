@@ -6,4 +6,6 @@ comment1.text=\r\n\ Obtention\ d'une\ liste\ de\ mots\ a\u00A0\ partir\ de\ la\ 
 comment2.params=liste
 comment2.target=java.util.Map\ occurrencesDesMots(java.util.List)
 comment2.text=\r\n\ Obtention\ d'une\ liste\ de\ couples\ <String,Integer>.\ \r\n\ A\ chaque\ mot\ pr\u00E9sent\ dans\ la\ liste,\ est\ associ\u00E9\ son\ nombre\ d'occurrence.\r\n\ \r\n\ @param\ liste\ la\ liste\ des\ mots\r\n
-numComments=3
+comment3.params=s\ lst
+comment3.target=int\ occ(java.lang.String,\ java.util.List)
+numComments=4
